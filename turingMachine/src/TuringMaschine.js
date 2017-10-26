@@ -1,7 +1,7 @@
 export default class TuringMaschine {
     constructor() {
         //turing machine state declaration
-        this.alphabet = ["0", "1", "B"];
+        this.alphabet = ["0", "1", "#", "B"];
 
         this.allStates = [];
         this.startState = undefined;
@@ -126,10 +126,33 @@ export default class TuringMaschine {
     }
 
     printCurrentState() {
+        console.log("current state : ", this.stateRegister);
         console.table({
             tape: { ...this.tape },
             position: { [this.headPosition]: "↑" }
         });
+    }
+
+    run() {
+        while (this.step() && this.stepCounter < 1000) {
+            // this.printCurrentState();
+        }
+        this.printCurrentState();
+    }
+
+    export() {
+        const exp = {
+            alphabet: this.alphabet,
+            states: this.states,
+            endState: this.endState,
+            startState: this.startState,
+            instructionTable: this.instructionTable
+        };
+        return JSON.stringify(exp);
+    }
+
+    import(tm) {
+        Object.assign(this, JSON.parse(tm));
     }
 }
 
